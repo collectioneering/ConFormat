@@ -143,23 +143,23 @@ public partial class TableBuilder
         {
             _stringBuilder.Clear();
             PopulatePreContent(in tbe, specialLine);
-                    switch (specialLine)
-                    {
-                        case SpecialLine.None:
-                            _stringBuilder.Append(_options.RowSeparator, tbe.Length);
-                            break;
-                        case SpecialLine.Top:
-                            _stringBuilder.Append(_options.TopRowSeparator, tbe.Length);
-                            break;
-                        case SpecialLine.RowSeparator:
-                            _stringBuilder.Append(_options.RowSeparator, tbe.Length);
-                            break;
-                        case SpecialLine.Bottom:
-                            _stringBuilder.Append(_options.BottomRowSeparator, tbe.Length);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
-                    }
+            switch (specialLine)
+            {
+                case SpecialLine.None:
+                    _stringBuilder.Append(_options.RowSeparator, tbe.Length);
+                    break;
+                case SpecialLine.Top:
+                    _stringBuilder.Append(_options.TopRowSeparator, tbe.Length);
+                    break;
+                case SpecialLine.RowSeparator:
+                    _stringBuilder.Append(_options.RowSeparator, tbe.Length);
+                    break;
+                case SpecialLine.Bottom:
+                    _stringBuilder.Append(_options.BottomRowSeparator, tbe.Length);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
+            }
             PopulatePostContent(in tbe, specialLine);
             WriteCurrentStringBuilderContent(textWriter);
         }
@@ -262,29 +262,22 @@ public partial class TableBuilder
         {
             if (_options.InsertPad)
             {
-                if (specialLine != SpecialLine.None)
+                switch (specialLine)
                 {
-                    switch (specialLine)
-                    {
-                        case SpecialLine.None:
-                            _stringBuilder.Append(' ');
-                            break;
-                        case SpecialLine.Top:
-                            _stringBuilder.Append(_options.TopRowSeparator);
-                            break;
-                        case SpecialLine.RowSeparator:
-                            _stringBuilder.Append(_options.RowSeparator);
-                            break;
-                        case SpecialLine.Bottom:
-                            _stringBuilder.Append(_options.BottomRowSeparator);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
-                    }
-                }
-                else
-                {
-                    _stringBuilder.Append(' ');
+                    case SpecialLine.None:
+                        _stringBuilder.Append(' ');
+                        break;
+                    case SpecialLine.Top:
+                        _stringBuilder.Append(_options.TopRowSeparator);
+                        break;
+                    case SpecialLine.RowSeparator:
+                        _stringBuilder.Append(_options.RowSeparator);
+                        break;
+                    case SpecialLine.Bottom:
+                        _stringBuilder.Append(_options.BottomRowSeparator);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
                 }
             }
             switch (specialLine)
@@ -306,29 +299,22 @@ public partial class TableBuilder
             }
             if (_options.InsertPad)
             {
-                if (specialLine != SpecialLine.None)
+                switch (specialLine)
                 {
-                    switch (specialLine)
-                    {
-                        case SpecialLine.None:
-                            _stringBuilder.Append(' ');
-                            break;
-                        case SpecialLine.Top:
-                            _stringBuilder.Append(_options.TopRowSeparator);
-                            break;
-                        case SpecialLine.RowSeparator:
-                            _stringBuilder.Append(_options.RowSeparator);
-                            break;
-                        case SpecialLine.Bottom:
-                            _stringBuilder.Append(_options.BottomRowSeparator);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
-                    }
-                }
-                else
-                {
-                    _stringBuilder.Append(' ');
+                    case SpecialLine.None:
+                        _stringBuilder.Append(' ');
+                        break;
+                    case SpecialLine.Top:
+                        _stringBuilder.Append(_options.TopRowSeparator);
+                        break;
+                    case SpecialLine.RowSeparator:
+                        _stringBuilder.Append(_options.RowSeparator);
+                        break;
+                    case SpecialLine.Bottom:
+                        _stringBuilder.Append(_options.BottomRowSeparator);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
                 }
             }
         }
