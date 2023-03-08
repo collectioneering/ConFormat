@@ -10,6 +10,12 @@ public record UnicodeTableBuilderOptions(bool InsertPad = true) : TableBuilderOp
     public override char RowSeparator => '─';
 
     /// <inheritdoc />
+    public override char TopRowSeparator => '━';
+
+    /// <inheritdoc />
+    public override char BottomRowSeparator => '━';
+
+    /// <inheritdoc />
     public override char RowColumnSeparator => '┼';
 
     /// <inheritdoc />

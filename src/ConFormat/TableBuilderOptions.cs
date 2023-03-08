@@ -12,6 +12,16 @@ public record TableBuilderOptions(bool InsertPad = true)
     public virtual char RowSeparator => '-';
 
     /// <summary>
+    /// Row separator.
+    /// </summary>
+    public virtual char TopRowSeparator => '-';
+
+    /// <summary>
+    /// Row separator.
+    /// </summary>
+    public virtual char BottomRowSeparator => '-';
+
+    /// <summary>
     /// Row / column separator.
     /// </summary>
     public virtual char RowColumnSeparator => '-';

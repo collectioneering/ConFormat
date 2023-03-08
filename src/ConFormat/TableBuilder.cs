@@ -35,6 +35,14 @@ public partial class TableBuilder
         {
             throw new ArgumentException("Row separator must have width 1");
         }
+        if (EastAsianWidth.GetWidth(_options.TopRowSeparator) != 1)
+        {
+            throw new ArgumentException("Top row separator must have width 1");
+        }
+        if (EastAsianWidth.GetWidth(_options.BottomRowSeparator) != 1)
+        {
+            throw new ArgumentException("Bottom row separator must have width 1");
+        }
         string?[] tmp = ArrayPool<string?>.Shared.Rent(4);
         try
         {
@@ -135,7 +143,23 @@ public partial class TableBuilder
         {
             _stringBuilder.Clear();
             PopulatePreContent(in tbe, specialLine);
-            _stringBuilder.Append(_options.RowSeparator, tbe.Length);
+                    switch (specialLine)
+                    {
+                        case SpecialLine.None:
+                            _stringBuilder.Append(_options.RowSeparator, tbe.Length);
+                            break;
+                        case SpecialLine.Top:
+                            _stringBuilder.Append(_options.TopRowSeparator, tbe.Length);
+                            break;
+                        case SpecialLine.RowSeparator:
+                            _stringBuilder.Append(_options.RowSeparator, tbe.Length);
+                            break;
+                        case SpecialLine.Bottom:
+                            _stringBuilder.Append(_options.BottomRowSeparator, tbe.Length);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
+                    }
             PopulatePostContent(in tbe, specialLine);
             WriteCurrentStringBuilderContent(textWriter);
         }
@@ -175,13 +199,22 @@ public partial class TableBuilder
                 _stringBuilder.Append(value);
                 if (_options.InsertPad)
                 {
-                    if (specialLine != SpecialLine.None)
+                    switch (specialLine)
                     {
-                        _stringBuilder.Append(_options.RowSeparator);
-                    }
-                    else
-                    {
-                        _stringBuilder.Append(' ');
+                        case SpecialLine.None:
+                            _stringBuilder.Append(' ');
+                            break;
+                        case SpecialLine.Top:
+                            _stringBuilder.Append(_options.TopRowSeparator);
+                            break;
+                        case SpecialLine.RowSeparator:
+                            _stringBuilder.Append(_options.RowSeparator);
+                            break;
+                        case SpecialLine.Bottom:
+                            _stringBuilder.Append(_options.BottomRowSeparator);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
                     }
                 }
             }
@@ -204,13 +237,22 @@ public partial class TableBuilder
             {
                 if (_options.InsertPad)
                 {
-                    if (specialLine != SpecialLine.None)
+                    switch (specialLine)
                     {
-                        _stringBuilder.Append(_options.RowSeparator);
-                    }
-                    else
-                    {
-                        _stringBuilder.Append(' ');
+                        case SpecialLine.None:
+                            _stringBuilder.Append(' ');
+                            break;
+                        case SpecialLine.Top:
+                            _stringBuilder.Append(_options.TopRowSeparator);
+                            break;
+                        case SpecialLine.RowSeparator:
+                            _stringBuilder.Append(_options.RowSeparator);
+                            break;
+                        case SpecialLine.Bottom:
+                            _stringBuilder.Append(_options.BottomRowSeparator);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
                     }
                 }
                 _stringBuilder.Append(value);
@@ -222,7 +264,23 @@ public partial class TableBuilder
             {
                 if (specialLine != SpecialLine.None)
                 {
-                    _stringBuilder.Append(_options.RowSeparator);
+                    switch (specialLine)
+                    {
+                        case SpecialLine.None:
+                            _stringBuilder.Append(' ');
+                            break;
+                        case SpecialLine.Top:
+                            _stringBuilder.Append(_options.TopRowSeparator);
+                            break;
+                        case SpecialLine.RowSeparator:
+                            _stringBuilder.Append(_options.RowSeparator);
+                            break;
+                        case SpecialLine.Bottom:
+                            _stringBuilder.Append(_options.BottomRowSeparator);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
+                    }
                 }
                 else
                 {
@@ -250,7 +308,23 @@ public partial class TableBuilder
             {
                 if (specialLine != SpecialLine.None)
                 {
-                    _stringBuilder.Append(_options.RowSeparator);
+                    switch (specialLine)
+                    {
+                        case SpecialLine.None:
+                            _stringBuilder.Append(' ');
+                            break;
+                        case SpecialLine.Top:
+                            _stringBuilder.Append(_options.TopRowSeparator);
+                            break;
+                        case SpecialLine.RowSeparator:
+                            _stringBuilder.Append(_options.RowSeparator);
+                            break;
+                        case SpecialLine.Bottom:
+                            _stringBuilder.Append(_options.BottomRowSeparator);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(specialLine), specialLine, null);
+                    }
                 }
                 else
                 {

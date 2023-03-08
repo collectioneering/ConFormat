@@ -6,14 +6,14 @@ using (var bar = BarContext.Create(Console.Out, false, () => Console.IsOutputRed
     Stopwatch sw = new();
     sw.Start();
     var content = TimedDownloadPrefabContentFiller.Create("Downloading...");
-    const int n = 16;
+    const int n = 64;
     bar.Write(content);
     for (int i = 0; i < n; i++)
     {
-        await Task.Delay(TimeSpan.FromSeconds(0.1));
+        await Task.Delay(TimeSpan.FromSeconds(0.05));
         content.SetProgress((float)(i + 1) / n);
         content.SetDuration(sw.Elapsed);
-        bar.Update(content);
+        bar.Write(content);
     }
     content.SetProgress(1);
     content.SetDuration(sw.Elapsed);
