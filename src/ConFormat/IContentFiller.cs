@@ -12,5 +12,6 @@ public interface IContentFiller
     /// </summary>
     /// <param name="stringBuilder"><see cref="StringBuilder"/> to append to.</param>
     /// <param name="width">Width to fill.</param>
-    void Fill(StringBuilder stringBuilder, int width);
+    /// <param name="scrollIndex">Current scroll index for this element.</param>
+    void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0);
 }

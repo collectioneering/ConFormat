@@ -6,7 +6,12 @@ namespace ConFormat;
 
 internal static class StringFillUtil
 {
-    public static void FillLeft(string content, StringBuilder stringBuilder, int width)
+    public static int ComputeLength(string content)
+    {
+        return EastAsianWidth.GetWidth(content);
+    }
+
+    public static void FillLeft(string content, StringBuilder stringBuilder, int width, int scrollIndex = 0)
     {
         if (width < 1)
         {
@@ -22,6 +27,19 @@ internal static class StringFillUtil
         while (enumerator.MoveNext())
         {
             int prevRuneWidth = EastAsianWidth.GetWidth(prevRune.Value);
+            if (scrollIndex > 0)
+            {
+                if (prevRuneWidth >= scrollIndex)
+                {
+                    scrollIndex = 0;
+                }
+                else
+                {
+                    scrollIndex -= prevRuneWidth;
+                }
+                prevRune = enumerator.Current;
+                continue;
+            }
             if (prevRuneWidth + 1 > width)
             {
                 stringBuilder.Append('…');
@@ -33,6 +51,11 @@ internal static class StringFillUtil
             buf.Clear();
             width -= prevRuneWidth;
             prevRune = enumerator.Current;
+        }
+        if (scrollIndex > 0)
+        {
+            PadRemaining(stringBuilder, width);
+            return;
         }
         int lastRuneWidth = EastAsianWidth.GetWidth(prevRune.Value);
         if (lastRuneWidth > width)

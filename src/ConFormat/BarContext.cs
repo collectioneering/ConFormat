@@ -48,26 +48,28 @@ public abstract class BarContext : IDisposable
     /// Writes the specified content immediately.
     /// </summary>
     /// <param name="contentFiller">Content.</param>
+    /// <param name="scrollIndex">Current scroll index for the content.</param>
     /// <typeparam name="T">Content filler type.</typeparam>
-    public void Write<T>(T contentFiller) where T : IContentFiller
+    public void Write<T>(ref T contentFiller, int scrollIndex = 0) where T : IContentFiller
     {
         _active = true;
-        DrawInternal(contentFiller);
+        DrawInternal(ref contentFiller, scrollIndex);
     }
 
     /// <summary>
-    /// Updates with the specified content if the bar is due for an update based on the configured upate interval.
+    /// Updates with the specified content if the bar is due for an update based on the configured update interval.
     /// </summary>
     /// <param name="contentFiller">Content.</param>
+    /// <param name="scrollIndex">Current scroll index for the content.</param>
     /// <typeparam name="T">Content filler type.</typeparam>
-    public void Update<T>(T contentFiller) where T : IContentFiller
+    public void Update<T>(ref T contentFiller, int scrollIndex = 0) where T : IContentFiller
     {
         _active = true;
         if (_stopwatch.Elapsed < _interval)
         {
             return;
         }
-        DrawInternal(contentFiller);
+        DrawInternal(ref contentFiller, scrollIndex);
     }
 
     /// <summary>
@@ -76,7 +78,8 @@ public abstract class BarContext : IDisposable
     public void Clear()
     {
         _active = true;
-        DrawInternal(new BlankContentFiller());
+        var blank = new BlankContentFiller();
+        DrawInternal(ref blank, 0);
         _output.Write('\r');
     }
 
@@ -93,7 +96,7 @@ public abstract class BarContext : IDisposable
         EndLine();
     }
 
-    private void DrawInternal<T>(T contentFiller) where T : IContentFiller
+    private void DrawInternal<T>(ref T contentFiller, int scrollIndex) where T : IContentFiller
     {
         _stopwatch.Restart();
         _stringBuilder.Clear();
@@ -101,7 +104,7 @@ public abstract class BarContext : IDisposable
         _stringBuilder.Append('\r');
         if (widthRemaining > 0)
         {
-            contentFiller.Fill(_stringBuilder, widthRemaining);
+            contentFiller.Fill(_stringBuilder, widthRemaining, scrollIndex);
         }
         DrawLine(_stringBuilder);
         _stringBuilder.Clear();
@@ -109,7 +112,7 @@ public abstract class BarContext : IDisposable
 
     internal struct BlankContentFiller : IContentFiller
     {
-        public void Fill(StringBuilder stringBuilder, int width)
+        public void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0)
         {
             StringFillUtil.PadRemaining(stringBuilder, width);
         }

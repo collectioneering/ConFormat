@@ -28,6 +28,8 @@ public readonly struct StringContentFiller : IContentFiller
     /// </summary>
     public readonly ContentAlignment Alignment;
 
+    private readonly int _contentLength;
+
     /// <summary>
     /// Initializes an instance of <see cref="StringContentFiller"/>.
     /// </summary>
@@ -37,15 +39,40 @@ public readonly struct StringContentFiller : IContentFiller
     {
         Content = content;
         Alignment = alignment;
+        _contentLength = StringFillUtil.ComputeLength(content);
     }
 
     /// <inheritdoc />
-    public void Fill(StringBuilder stringBuilder, int width)
+    public void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0)
     {
         switch (Alignment)
         {
             case ContentAlignment.Left:
-                StringFillUtil.FillLeft(Content, stringBuilder, width);
+                if (width < 1)
+                {
+                    break;
+                }
+                if (_contentLength >= width)
+                {
+                    const int gap = 2;
+                    uint contentLength = (uint)_contentLength;
+                    uint targetWidth = contentLength + gap;
+                    uint offset = (uint)scrollIndex % targetWidth;
+                    uint remainingDraw = targetWidth - offset;
+                    if (remainingDraw < width)
+                    {
+                        StringFillUtil.FillLeft(Content, stringBuilder, (int)remainingDraw, scrollIndex);
+                        StringFillUtil.FillLeft(Content, stringBuilder, (int)(width - remainingDraw));
+                    }
+                    else
+                    {
+                        StringFillUtil.FillLeft(Content, stringBuilder, width, (int)offset);
+                    }
+                }
+                else
+                {
+                    StringFillUtil.FillLeft(Content, stringBuilder, width);
+                }
                 break;
             case ContentAlignment.Right:
                 StringFillUtil.FillRight(Content, stringBuilder, width);

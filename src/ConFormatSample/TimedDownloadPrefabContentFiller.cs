@@ -8,13 +8,14 @@ public struct TimedDownloadPrefabContentFiller : IContentFiller
         return new TimedDownloadPrefabContentFiller(initialName);
     }
 
-    public BorderContentFiller<SplitContentFiller<StringContentFiller, FixedSplitContentFiller<StringContentFiller, FixedSplitContentFiller<ColorContentFiller<ProgressContentFiller>, StringContentFiller>>>> Content;
+    public BorderContentFiller<SplitContentFiller<ScrollingContentFiller<StringContentFiller>, FixedSplitContentFiller<StringContentFiller, FixedSplitContentFiller<ColorContentFiller<ProgressContentFiller>, StringContentFiller>>>> Content;
 
     public TimedDownloadPrefabContentFiller(string initialName)
     {
         Content = BorderContentFiller.Create("[", "]",
             SplitContentFiller.Create("|", 0.25f, 0.75f,
-                StringContentFiller.Create(initialName, ContentAlignment.Left),
+                ScrollingContentFiller.Create(TimeSpan.FromSeconds(0.4f),
+                    StringContentFiller.Create(initialName, ContentAlignment.Left)),
                 FixedSplitContentFiller.Create("|", 7, 0,
                     StringContentFiller.Create("0.0s", ContentAlignment.Right),
                     FixedSplitContentFiller.Create("|", 6, 1,
@@ -24,7 +25,7 @@ public struct TimedDownloadPrefabContentFiller : IContentFiller
 
     public void SetName(string name)
     {
-        Content.Content.ContentLeft = new StringContentFiller(name, ContentAlignment.Left);
+        Content.Content.ContentLeft.Content = new StringContentFiller(name, ContentAlignment.Left);
     }
 
     public void SetDuration(TimeSpan duration)
@@ -39,7 +40,7 @@ public struct TimedDownloadPrefabContentFiller : IContentFiller
         Content.Content.ContentRight.ContentRight.ContentRight = new StringContentFiller($"{100.0f * progress:F1}%", ContentAlignment.Right);
     }
 
-    public void Fill(StringBuilder stringBuilder, int width)
+    public void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0)
     {
         Content.Fill(stringBuilder, width);
     }

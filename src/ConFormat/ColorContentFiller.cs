@@ -63,7 +63,7 @@ public struct ColorContentFiller<TContent> : IContentFiller where TContent : ICo
     }
 
     /// <inheritdoc />
-    public void Fill(StringBuilder stringBuilder, int width)
+    public void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0)
     {
         if (width < 1)
         {
@@ -73,7 +73,7 @@ public struct ColorContentFiller<TContent> : IContentFiller where TContent : ICo
         {
             stringBuilder.Append(sequence);
         }
-        Content.Fill(stringBuilder, width);
+        Content.Fill(stringBuilder, width, scrollIndex);
         stringBuilder.Append(ColorContentFiller.Reset);
     }
 }

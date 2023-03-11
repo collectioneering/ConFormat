@@ -60,7 +60,7 @@ public struct BorderContentFiller<TContent> : IContentFiller where TContent : IC
     }
 
     /// <inheritdoc />
-    public void Fill(StringBuilder stringBuilder, int width)
+    public void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0)
     {
         if (width < 1)
         {

@@ -43,7 +43,7 @@ public class EllipsisSuffixContentFiller : IContentFiller
     }
 
     /// <inheritdoc />
-    public void Fill(StringBuilder stringBuilder, int width)
+    public void Fill(StringBuilder stringBuilder, int width, int scrollIndex = 0)
     {
         StringFillUtil.FillLeft(_messages[_i], stringBuilder, width);
         _i = (_i + 1) % 3;

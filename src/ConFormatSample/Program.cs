@@ -28,20 +28,20 @@ async Task DemoDownloadBarAsync()
     {
         Stopwatch sw = new();
         sw.Start();
-        var content = TimedDownloadPrefabContentFiller.Create("Downloading...");
+        var content = TimedDownloadPrefabContentFiller.Create("Retrieving metadata for \"【MV】Killer neuron / 佐高陵平 feat. 藍月なくる\"");
         const int n = 64;
-        bar.Write(content);
+        bar.Write(ref content);
         for (int i = 0; i < n; i++)
         {
             await Task.Delay(TimeSpan.FromSeconds(0.05));
             content.SetProgress((float)(i + 1) / n);
             content.SetDuration(sw.Elapsed);
-            bar.Write(content);
+            bar.Write(ref content);
         }
         content.SetProgress(1);
         content.SetDuration(sw.Elapsed);
         sw.Stop();
-        bar.Write(content);
+        bar.Write(ref content);
         await Task.Delay(TimeSpan.FromSeconds(1));
         bar.Clear();
     }
