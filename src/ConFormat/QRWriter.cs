@@ -1,4 +1,6 @@
-﻿namespace ConFormat;
+﻿using System.Globalization;
+
+namespace ConFormat;
 
 /// <summary>
 /// Provides utility for writing QR code content to a <see cref="TextWriter"/>.
@@ -70,32 +72,37 @@ public static class QRWriter
         {
             for (int i = 0; i < w; i++)
             {
-                if (QR.GetModuleBounded(qr, i, y))
-                {
-                    writer.Write("\u001b[38;5;232m"); // fg
-                    writer.Write(Blocks[2]);
-                }
-                else
-                {
-                    writer.Write("\u001b[38;5;231m"); // fg
-                    writer.Write(Blocks[2]);
-                }
+                writer.Write(QR.GetModuleBounded(qr, i, y) ? "\u001b[38;5;232m▀" : "\u001b[38;5;231m▀"); // fg
             }
         }
         else
         {
-            writer.Write("\u001b[38;5;231m"); // fg
-            writer.Write("\u001b[48;5;232m"); // bg
+            writer.Write("\u001b[38;5;231m\u001b[48;5;232m"); // fg,bg
             for (int i = 0; i < w; i++)
             {
                 writer.Write(Blocks[(QR.GetModuleBounded(qr, i, y) ? 1 : 0) | (QR.GetModuleBounded(qr, i, y + 1) ? 2 : 0)]);
             }
         }
-        writer.Write("\u001b[0m");
-        writer.Write("\u001b[");
-        writer.Write(w);
+        writer.Write("\u001b[0m\u001b[");
+        WritePlain(writer, w);
         writer.Write("D\u001b[1B");
     }
+
+    private static void WritePlain(TextWriter textWriter, int value)
+    {
+        Span<char> tSpan = stackalloc char[IntBitLength];
+        if (value.TryFormat(tSpan, out int tSpanLength, provider: CultureInfo.InvariantCulture))
+        {
+            textWriter.Write(tSpan[..tSpanLength]);
+        }
+        else
+        {
+            textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
+        }
+    }
+
+    // -2147483648
+    private const int IntBitLength = 11;
 
     private static ReadOnlySpan<char> Blocks => "█▄▀ ";
 }
