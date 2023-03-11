@@ -5,7 +5,7 @@ namespace ConFormat;
 /// <summary>
 /// Content filler for text.
 /// </summary>
-public readonly struct StringContentFiller : IContentFiller
+public class StringContentFiller : IContentFiller
 {
     /// <summary>
     /// Creates an instance of <see cref="StringContentFiller"/>.
@@ -21,14 +21,23 @@ public readonly struct StringContentFiller : IContentFiller
     /// <summary>
     /// Content.
     /// </summary>
-    public readonly string Content;
+    public string Content
+    {
+        get => _content;
+        set
+        {
+            _content = value ?? throw new InvalidOperationException();
+            _contentLength = StringFillUtil.ComputeLength(_content);
+        }
+    }
 
     /// <summary>
     /// Text alignment.
     /// </summary>
-    public readonly ContentAlignment Alignment;
+    public ContentAlignment Alignment { get; set; }
 
-    private readonly int _contentLength;
+    private int _contentLength;
+    private string _content;
 
     /// <summary>
     /// Initializes an instance of <see cref="StringContentFiller"/>.
@@ -37,7 +46,7 @@ public readonly struct StringContentFiller : IContentFiller
     /// <param name="alignment">Text content.</param>
     public StringContentFiller(string content, ContentAlignment alignment)
     {
-        Content = content;
+        _content = content;
         Alignment = alignment;
         _contentLength = StringFillUtil.ComputeLength(content);
     }

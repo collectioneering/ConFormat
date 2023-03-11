@@ -4,34 +4,9 @@ using EA;
 namespace ConFormat;
 
 /// <summary>
-/// Provides default creation for <see cref="FixedSplitContentFiller{TContentLeft,TContentRight}"/>.
-/// </summary>
-public static class FixedSplitContentFiller
-{
-    /// <summary>
-    /// Creates an instance of <see cref="FixedSplitContentFiller{TContentLeft,TContentRight}"/>.
-    /// </summary>
-    /// <param name="separator">Separator.</param>
-    /// <param name="fixedWidth">Fixed width for element that uses it.</param>
-    /// <param name="fixedWidthIndex">Element index for content that has fixed width.</param>
-    /// <param name="initialContentLeft">Initial left content.</param>
-    /// <param name="initialContentRight">Initial right content.</param>
-    /// <typeparam name="TContentLeft">Left content type.</typeparam>
-    /// <typeparam name="TContentRight">Right content type.</typeparam>
-    /// <returns>Content instance.</returns>
-    public static FixedSplitContentFiller<TContentLeft, TContentRight> Create<TContentLeft, TContentRight>(string separator, int fixedWidth, int fixedWidthIndex, TContentLeft initialContentLeft, TContentRight initialContentRight)
-        where TContentLeft : IContentFiller where TContentRight : IContentFiller
-    {
-        return new FixedSplitContentFiller<TContentLeft, TContentRight>(separator, fixedWidth, fixedWidthIndex, initialContentLeft, initialContentRight);
-    }
-}
-
-/// <summary>
 /// Content filler that uses two contained content fillers, with a fixed width for one of the elements.
 /// </summary>
-/// <typeparam name="TContentLeft">Left content type.</typeparam>
-/// <typeparam name="TContentRight">Right content type.</typeparam>
-public struct FixedSplitContentFiller<TContentLeft, TContentRight> : IContentFiller where TContentLeft : IContentFiller where TContentRight : IContentFiller
+public class FixedSplitContentFiller : IContentFiller
 {
     /// <summary>
     /// Separator.
@@ -43,16 +18,30 @@ public struct FixedSplitContentFiller<TContentLeft, TContentRight> : IContentFil
     /// <summary>
     /// Left content.
     /// </summary>
-    public TContentLeft ContentLeft;
+    public IContentFiller ContentLeft;
 
     /// <summary>
     /// Right content.
     /// </summary>
-    public TContentRight ContentRight;
+    public IContentFiller ContentRight;
     private readonly int _separatorWidth;
 
     /// <summary>
-    /// Initializes an instance of <see cref="FixedSplitContentFiller{TContentLeft,TContentRight}"/>.
+    /// Creates an instance of <see cref="FixedSplitContentFiller"/>.
+    /// </summary>
+    /// <param name="separator">Separator.</param>
+    /// <param name="fixedWidth">Fixed width for element that uses it.</param>
+    /// <param name="fixedWidthIndex">Element index for content that has fixed width.</param>
+    /// <param name="initialContentLeft">Initial left content.</param>
+    /// <param name="initialContentRight">Initial right content.</param>
+    /// <returns>Content instance.</returns>
+    public static FixedSplitContentFiller Create(string separator, int fixedWidth, int fixedWidthIndex, IContentFiller initialContentLeft, IContentFiller initialContentRight)
+    {
+        return new FixedSplitContentFiller(separator, fixedWidth, fixedWidthIndex, initialContentLeft, initialContentRight);
+    }
+
+    /// <summary>
+    /// Initializes an instance of <see cref="FixedSplitContentFiller"/>.
     /// </summary>
     /// <param name="separator">Separator.</param>
     /// <param name="fixedWidth">Fixed width for element that uses it.</param>
@@ -61,7 +50,7 @@ public struct FixedSplitContentFiller<TContentLeft, TContentRight> : IContentFil
     /// <param name="initialContentRight">Initial right content.</param>
     /// <returns>Content instance.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown for invalid <paramref name="fixedWidthIndex"/> (must be 0 or 1) or <paramref name="fixedWidth"/> (must be &gt;=0).</exception>
-    public FixedSplitContentFiller(string separator, int fixedWidth, int fixedWidthIndex, TContentLeft initialContentLeft, TContentRight initialContentRight)
+    public FixedSplitContentFiller(string separator, int fixedWidth, int fixedWidthIndex, IContentFiller initialContentLeft, IContentFiller initialContentRight)
     {
         if (fixedWidth < 0)
         {

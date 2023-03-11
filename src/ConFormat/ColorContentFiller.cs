@@ -3,13 +3,13 @@
 namespace ConFormat;
 
 /// <summary>
-/// Provides default creation for <see cref="ColorContentFiller{TContent}"/>.
+/// Content filler that applies color to output.
 /// </summary>
-public static class ColorContentFiller
+public class ColorContentFiller : IContentFiller
 {
-    internal const string Reset = "\u001b[0m";
+    private const string Reset = "\u001b[0m";
 
-    internal static readonly Dictionary<ConsoleColor, string> s_sequences = new()
+    private static readonly Dictionary<ConsoleColor, string> s_sequences = new()
     {
         /*{Color.Black, "\u001b[30;1m"},*/
         { ConsoleColor.Red, "\u001b[31;1m" },
@@ -20,27 +20,6 @@ public static class ColorContentFiller
         { ConsoleColor.Cyan, "\u001b[36;1m" },
         { ConsoleColor.White, "\u001b[37;1m" },
     };
-
-    /// <summary>
-    /// Creates an instance of <see cref="ColorContentFiller{TContent}"/>.
-    /// </summary>
-    /// <param name="initialColor">Initial color.</param>
-    /// <param name="initialContent">Initial inner content.</param>
-    /// <typeparam name="TContent">Inner content type.</typeparam>
-    /// <returns>Content instance.</returns>
-    public static ColorContentFiller<TContent> Create<TContent>(ConsoleColor initialColor, TContent initialContent)
-        where TContent : IContentFiller
-    {
-        return new ColorContentFiller<TContent>(initialColor, initialContent);
-    }
-}
-
-/// <summary>
-/// Content filler that applies color to output.
-/// </summary>
-/// <typeparam name="TContent">Inner content type.</typeparam>
-public struct ColorContentFiller<TContent> : IContentFiller where TContent : IContentFiller
-{
     /// <summary>
     /// Color.
     /// </summary>
@@ -49,14 +28,25 @@ public struct ColorContentFiller<TContent> : IContentFiller where TContent : ICo
     /// <summary>
     /// Inner content.
     /// </summary>
-    public TContent Content;
+    public IContentFiller Content;
 
     /// <summary>
-    /// Initializes an instance of <see cref="ColorContentFiller{TContent}"/>.
+    /// Creates an instance of <see cref="ColorContentFiller"/>.
     /// </summary>
     /// <param name="initialColor">Initial color.</param>
     /// <param name="initialContent">Initial inner content.</param>
-    public ColorContentFiller(ConsoleColor initialColor, TContent initialContent)
+    /// <returns>Content instance.</returns>
+    public static ColorContentFiller Create(ConsoleColor initialColor, IContentFiller initialContent)
+    {
+        return new ColorContentFiller(initialColor, initialContent);
+    }
+
+    /// <summary>
+    /// Initializes an instance of <see cref="ColorContentFiller"/>.
+    /// </summary>
+    /// <param name="initialColor">Initial color.</param>
+    /// <param name="initialContent">Initial inner content.</param>
+    public ColorContentFiller(ConsoleColor initialColor, IContentFiller initialContent)
     {
         Color = initialColor;
         Content = initialContent;
@@ -69,11 +59,11 @@ public struct ColorContentFiller<TContent> : IContentFiller where TContent : ICo
         {
             return;
         }
-        if (ColorContentFiller.s_sequences.TryGetValue(Color, out string? sequence))
+        if (s_sequences.TryGetValue(Color, out string? sequence))
         {
             stringBuilder.Append(sequence);
         }
         Content.Fill(stringBuilder, width, scrollIndex);
-        stringBuilder.Append(ColorContentFiller.Reset);
+        stringBuilder.Append(Reset);
     }
 }

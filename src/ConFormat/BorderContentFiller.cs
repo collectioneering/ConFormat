@@ -4,30 +4,9 @@ using EA;
 namespace ConFormat;
 
 /// <summary>
-/// Provides default creation for <see cref="BorderContentFiller{TContent}"/>.
-/// </summary>
-public static class BorderContentFiller
-{
-    /// <summary>
-    /// Creates an instance of <see cref="BorderContentFiller{TContent}"/>.
-    /// </summary>
-    /// <param name="left">Left border.</param>
-    /// <param name="right">Right content.</param>
-    /// <param name="initialContent">Initial inner content.</param>
-    /// <typeparam name="TContent">Inner content type.</typeparam>
-    /// <returns>Content instance.</returns>
-    public static BorderContentFiller<TContent> Create<TContent>(string left, string right, TContent initialContent)
-        where TContent : IContentFiller
-    {
-        return new BorderContentFiller<TContent>(left, right, initialContent);
-    }
-}
-
-/// <summary>
 /// Content filler that provides left and right borders.
 /// </summary>
-/// <typeparam name="TContent">Inner content type.</typeparam>
-public struct BorderContentFiller<TContent> : IContentFiller where TContent : IContentFiller
+public class BorderContentFiller : IContentFiller
 {
     /// <summary>
     /// Left border.
@@ -43,15 +22,26 @@ public struct BorderContentFiller<TContent> : IContentFiller where TContent : IC
     /// <summary>
     /// Inner content.
     /// </summary>
-    public TContent Content;
+    public IContentFiller Content;
 
     /// <summary>
-    /// Initializes an instance of <see cref="BorderContentFiller{TContent}"/>.
+    /// Creates an instance of <see cref="BorderContentFiller"/>.
+    /// </summary>
+    /// <param name="left">Left border.</param>
+    /// <param name="right">Right content.</param>
+    /// <param name="initialContent">Initial inner content.</param>
+    /// <returns>Content instance.</returns>
+    public static BorderContentFiller Create(string left, string right, IContentFiller initialContent)
+    {
+        return new BorderContentFiller(left, right, initialContent);
+    }
+    /// <summary>
+    /// Initializes an instance of <see cref="BorderContentFiller"/>.
     /// </summary>
     /// <param name="left">Left border.</param>
     /// <param name="right">Right border.</param>
     /// <param name="initialContent"></param>
-    public BorderContentFiller(string left, string right, TContent initialContent)
+    public BorderContentFiller(string left, string right, IContentFiller initialContent)
     {
         Left = left;
         Right = right;

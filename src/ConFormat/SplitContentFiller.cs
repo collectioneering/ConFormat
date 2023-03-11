@@ -4,34 +4,9 @@ using EA;
 namespace ConFormat;
 
 /// <summary>
-/// Provides default creation for <see cref="SplitContentFiller{TContentLeft,TContentRight}"/>.
-/// </summary>
-public static class SplitContentFiller
-{
-    /// <summary>
-    /// Creates an instance of <see cref="SplitContentFiller{TContentLeft,TContentRight}"/>.
-    /// </summary>
-    /// <param name="separator">Separator.</param>
-    /// <param name="weightLeft">Weight for left content.</param>
-    /// <param name="weightRight">Weight for right content.</param>
-    /// <param name="initialContentLeft">Initial left content.</param>
-    /// <param name="initialContentRight">Initial right content.</param>
-    /// <typeparam name="TContentLeft">Left content type.</typeparam>
-    /// <typeparam name="TContentRight">Right content type.</typeparam>
-    /// <returns>Content instance.</returns>
-    public static SplitContentFiller<TContentLeft, TContentRight> Create<TContentLeft, TContentRight>(string separator, float weightLeft, float weightRight, TContentLeft initialContentLeft, TContentRight initialContentRight)
-        where TContentLeft : IContentFiller where TContentRight : IContentFiller
-    {
-        return new SplitContentFiller<TContentLeft, TContentRight>(separator, weightLeft, weightRight, initialContentLeft, initialContentRight);
-    }
-}
-
-/// <summary>
 /// Content filler that uses two contained content fillers, with relative weight-based sizing.
 /// </summary>
-/// <typeparam name="TContentLeft">Left content type.</typeparam>
-/// <typeparam name="TContentRight">Right content type.</typeparam>
-public struct SplitContentFiller<TContentLeft, TContentRight> : IContentFiller where TContentLeft : IContentFiller where TContentRight : IContentFiller
+public class SplitContentFiller : IContentFiller
 {
     /// <summary>
     /// Separator.
@@ -43,16 +18,30 @@ public struct SplitContentFiller<TContentLeft, TContentRight> : IContentFiller w
     /// <summary>
     /// Left content.
     /// </summary>
-    public TContentLeft ContentLeft;
+    public IContentFiller ContentLeft;
 
     /// <summary>
     /// Right content.
     /// </summary>
-    public TContentRight ContentRight;
+    public IContentFiller ContentRight;
     private readonly int _separatorWidth;
 
     /// <summary>
-    /// Initializes an instance of <see cref="SplitContentFiller{TContentLeft,TContentRight}"/>.
+    /// Creates an instance of <see cref="SplitContentFiller"/>.
+    /// </summary>
+    /// <param name="separator">Separator.</param>
+    /// <param name="weightLeft">Weight for left content.</param>
+    /// <param name="weightRight">Weight for right content.</param>
+    /// <param name="initialContentLeft">Initial left content.</param>
+    /// <param name="initialContentRight">Initial right content.</param>
+    /// <returns>Content instance.</returns>
+    public static SplitContentFiller Create(string separator, float weightLeft, float weightRight, IContentFiller initialContentLeft, IContentFiller initialContentRight)
+    {
+        return new SplitContentFiller(separator, weightLeft, weightRight, initialContentLeft, initialContentRight);
+    }
+
+    /// <summary>
+    /// Initializes an instance of <see cref="SplitContentFiller"/>.
     /// </summary>
     /// <param name="separator">Separator.</param>
     /// <param name="weightLeft">Weight for left content.</param>
@@ -60,7 +49,7 @@ public struct SplitContentFiller<TContentLeft, TContentRight> : IContentFiller w
     /// <param name="initialContentLeft">Initial left content.</param>
     /// <param name="initialContentRight">Initial right content.</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public SplitContentFiller(string separator, float weightLeft, float weightRight, TContentLeft initialContentLeft, TContentRight initialContentRight)
+    public SplitContentFiller(string separator, float weightLeft, float weightRight, IContentFiller initialContentLeft, IContentFiller initialContentRight)
     {
         if (weightLeft < 0)
         {

@@ -4,34 +4,14 @@ using System.Text;
 namespace ConFormat;
 
 /// <summary>
-/// Provides default creation for <see cref="ScrollingContentFiller{TContent}"/>.
-/// </summary>
-public class ScrollingContentFiller
-{
-    /// <summary>
-    /// Creates an instance of <see cref="ScrollingContentFiller{TContent}"/>.
-    /// </summary>
-    /// <param name="interval">Update interval.</param>
-    /// <param name="initialContent"></param>
-    /// <typeparam name="TContent">Initial inner content.</typeparam>
-    /// <returns>Content instance.</returns>
-    public static ScrollingContentFiller<TContent> Create<TContent>(TimeSpan interval, TContent initialContent)
-        where TContent : IContentFiller
-    {
-        return new ScrollingContentFiller<TContent>(interval, initialContent);
-    }
-}
-
-/// <summary>
 /// Content filler that applies scroll to output.
 /// </summary>
-/// <typeparam name="TContent">Inner content type.</typeparam>
-public struct ScrollingContentFiller<TContent> : IContentFiller where TContent : IContentFiller
+public class ScrollingContentFiller : IContentFiller
 {
     /// <summary>
     /// Inner content.
     /// </summary>
-    public TContent Content;
+    public IContentFiller Content;
 
     /// <summary>
     /// Stopwatch.
@@ -49,11 +29,22 @@ public struct ScrollingContentFiller<TContent> : IContentFiller where TContent :
     public int ScrollIndex;
 
     /// <summary>
-    /// Initializes an instance of <see cref="ScrollingContentFiller{TContent}"/>.
+    /// Creates an instance of <see cref="ScrollingContentFiller"/>.
+    /// </summary>
+    /// <param name="interval">Update interval.</param>
+    /// <param name="initialContent"></param>
+    /// <returns>Content instance.</returns>
+    public static ScrollingContentFiller Create(TimeSpan interval, IContentFiller initialContent)
+    {
+        return new ScrollingContentFiller(interval, initialContent);
+    }
+
+    /// <summary>
+    /// Initializes an instance of <see cref="ScrollingContentFiller"/>.
     /// </summary>
     /// <param name="interval">Update interval.</param>
     /// <param name="content">Initial inner content.</param>
-    public ScrollingContentFiller(TimeSpan interval, TContent content)
+    public ScrollingContentFiller(TimeSpan interval, IContentFiller content)
     {
         Stopwatch = new Stopwatch();
         Interval = interval;

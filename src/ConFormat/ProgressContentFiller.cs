@@ -5,7 +5,7 @@ namespace ConFormat;
 /// <summary>
 /// Content filler that displays a progress bar.
 /// </summary>
-public struct ProgressContentFiller : IContentFiller
+public class ProgressContentFiller : IContentFiller
 {
     /// <summary>
     /// Creates an instance of <see cref="ProgressContentFiller"/>.
