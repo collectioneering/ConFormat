@@ -41,7 +41,7 @@ public abstract class BarContext : IDisposable
         _widthFunc = widthFunc;
         _stopwatch = new Stopwatch();
         _stopwatch.Start();
-        _state = new BarState();
+        _state = new BarState(false);
     }
 
     /// <summary>

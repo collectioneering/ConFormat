@@ -4,7 +4,22 @@ namespace ConFormat;
 
 internal class BarState
 {
+    private readonly bool _persistPreviousDrawState;
     private readonly StringBuilder _stringBuilder = new();
+
+    public BarState(bool persistPreviousDrawState)
+    {
+        _persistPreviousDrawState = persistPreviousDrawState;
+    }
+
+    public void Redraw(TextWriter output)
+    {
+        if (!_persistPreviousDrawState)
+        {
+            throw new NotSupportedException($"Cannot call {nameof(Redraw)} when this {nameof(BarState)} instance is not set to persist previous draw state");
+        }
+        DrawLine(_stringBuilder, output);
+    }
 
     public void Draw<T>(ref T contentFiller, int scrollIndex, int availableWidth, TextWriter output) where T : IContentFiller
     {
@@ -16,7 +31,10 @@ internal class BarState
             contentFiller.Fill(_stringBuilder, widthRemaining, scrollIndex);
         }
         DrawLine(_stringBuilder, output);
-        _stringBuilder.Clear();
+        if (!_persistPreviousDrawState)
+        {
+            _stringBuilder.Clear();
+        }
     }
 
     /// <summary>
