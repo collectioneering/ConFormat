@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ConFormat;
 using ConFormatSample;
+using ConQR;
 
 // Demo is a verb
 DemoQR();

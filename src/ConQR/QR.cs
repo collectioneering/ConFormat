@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace ConFormat;
+namespace ConQR;
 
 /// <summary>
 /// Provides utilities for working with QR data.

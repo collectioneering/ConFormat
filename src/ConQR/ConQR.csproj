@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageVersion>0.4.0</PackageVersion>
+    <PackageVersion>0.1.0</PackageVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
   </PropertyGroup>
 
@@ -15,6 +15,14 @@
     <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Update="NOTICE.ConQR.md">
+      <Link>NOTICE.ConQR.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>contentFiles/any/any/</PackagePath>
+    </Content>
+  </ItemGroup>
+
   <PropertyGroup>
     <PackOnBuild>true</PackOnBuild>
     <PathMap>$(MSBuildProjectDirectory)=.</PathMap>
@@ -27,31 +35,18 @@
   <PropertyGroup>
     <Authors>Riina</Authors>
     <Owners>Riina</Owners>
-    <Description>Console text formatting</Description>
-    <Copyright>Copyright ©2023 Riina</Copyright>
+    <Description>Console formatting of QR</Description>
+    <Copyright>Copyright ©2025 Riina</Copyright>
     <PackageProjectUrl>https://github.com/collectioneering/ConFormat</PackageProjectUrl>
     <RepositoryUrl>https://github.com/collectioneering/ConFormat</RepositoryUrl>
     <Company>Riina</Company>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.CsWin32">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="EA" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="NativeMethods.txt" />
-  </ItemGroup>
-
   <PropertyGroup>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.ConQR.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <None Include="../../README.ConQR.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

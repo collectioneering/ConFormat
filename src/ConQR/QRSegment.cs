@@ -1,4 +1,4 @@
-﻿namespace ConFormat;
+﻿namespace ConQR;
 
 /// <summary>
 /// A segment of character/binary/control data in a QR Code symbol.

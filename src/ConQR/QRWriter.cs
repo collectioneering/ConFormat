@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace ConFormat;
+namespace ConQR;
 
 /// <summary>
 /// Provides utility for writing QR code content to a <see cref="TextWriter"/>.

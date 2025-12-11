@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConFormat\ConFormat.csproj" />
+    <ProjectReference Include="..\ConQR\ConQR.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

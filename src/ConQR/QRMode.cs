@@ -1,4 +1,4 @@
-﻿namespace ConFormat;
+﻿namespace ConQR;
 
 /// <summary>
 /// Describes how a segment's data bits are interpreted.

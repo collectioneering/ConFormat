@@ -1,4 +1,4 @@
-﻿namespace ConFormat;
+﻿namespace ConQR;
 
 /// <summary>
 /// The error correction level in a QR Code symbol.

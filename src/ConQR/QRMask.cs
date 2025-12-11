@@ -1,4 +1,4 @@
-﻿namespace ConFormat;
+﻿namespace ConQR;
 
 /// <summary>
 /// The mask pattern used in a QR Code symbol.
