@@ -243,6 +243,10 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         {
             interval = BarContext.DefaultInterval;
         }
+        if (!forceFallback && OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
+        {
+            return new WindowsMultiBarContext<TKey>(output, redirectedFunc, widthFunc, heightFunc, initialRowFunc, interval);
+        }
         return new WidthMinusOneMultiBarContext<TKey>(output, redirectedFunc, widthFunc, heightFunc, initialRowFunc, interval);
     }
 
