@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using Windows.Win32;
+using Windows.Win32.Foundation;
 using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Console;
 
@@ -28,12 +29,12 @@ public class WindowsBarContext : BarContext
     public WindowsBarContext(TextWriter output, Func<bool> redirectedFunc, Func<int> widthFunc, TimeSpan interval) : base(output, redirectedFunc, widthFunc, interval)
     {
         _wnd = PInvoke.CreateFile("CONOUT$",
-            FILE_ACCESS_FLAGS.FILE_GENERIC_READ | FILE_ACCESS_FLAGS.FILE_GENERIC_WRITE,
+            (uint)(GENERIC_ACCESS_RIGHTS.GENERIC_READ | GENERIC_ACCESS_RIGHTS.GENERIC_WRITE),
             FILE_SHARE_MODE.FILE_SHARE_WRITE,
             null,
             FILE_CREATION_DISPOSITION.OPEN_EXISTING,
             default,
-            default);
+            null);
         if (!PInvoke.GetConsoleMode(_wnd, out _originalMode))
         {
             throw new Win32Exception(Marshal.GetLastWin32Error());

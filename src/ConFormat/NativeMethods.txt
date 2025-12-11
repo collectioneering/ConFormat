@@ -1,3 +1,4 @@
 ﻿CreateFile
 GetConsoleMode
 SetConsoleMode
+GENERIC_ACCESS_RIGHTS
