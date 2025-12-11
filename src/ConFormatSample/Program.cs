@@ -98,11 +98,11 @@ async Task DemoMultiDownloadBarAsync()
                TimeSpan.FromSeconds(0.05)))
     {
         await Task.WhenAll(
-            DownloadRandomChainAsync(bar, 10, 2, 0.3),
-            DownloadRandomChainAsync(bar, 10, 2, 0.3),
-            DownloadRandomChainAsync(bar, 10, 2, 0.3),
-            DownloadRandomChainAsync(bar, 10, 2, 0.3),
-            DownloadRandomChainAsync(bar, 10, 2, 0.3));
+            DownloadRandomChainAsync(bar, 5, 2, 0.3),
+            DownloadRandomChainAsync(bar, 5, 2, 0.3),
+            DownloadRandomChainAsync(bar, 3, 2, 0.3),
+            DownloadRandomChainAsync(bar, 3, 2, 0.3),
+            DownloadRandomChainAsync(bar, 3, 2, 0.3));
     }
     await Task.Delay(TimeSpan.FromSeconds(1));
     using (var bar = MultiBarContext<string>.Create(
@@ -122,6 +122,24 @@ async Task DemoMultiDownloadBarAsync()
         bar.Write("b", ref content);
         bar.Write("c", ref content);
         await Task.Delay(TimeSpan.FromSeconds(1));
+        bar.ClearAll();
+    }
+    using (var bar = MultiBarContext<string>.Create(
+               Console.Out,
+               false,
+               static () => Console.IsOutputRedirected,
+               static () => Console.BufferWidth,
+               static () => Console.WindowHeight,
+               Console.CursorTop - Console.WindowTop,
+               TimeSpan.FromSeconds(0.05)))
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            var content = new StringContentFiller($"f{i}", ContentAlignment.Left);
+            bar.Allocate($"v{i}");
+            bar.Write($"v{i}", ref content);
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
+        }
         bar.ClearAll();
     }
 }

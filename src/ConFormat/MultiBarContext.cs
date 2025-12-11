@@ -9,16 +9,22 @@ namespace ConFormat;
 public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatable<TKey>
 {
     /// <summary>
-    /// Width available to the bar.
+    /// Width available to bars.
     /// </summary>
+
     protected virtual int AvailableWidth => _redirectedFunc() ? 40 : _widthFunc();
+
+    /// <summary>
+    /// Height available to the bars.
+    /// </summary>
+    protected virtual int AvailableHeight => _redirectedFunc() ? 40 : _heightFunc();
 
     private readonly object _lock = new();
     private readonly TextWriter _output;
     private readonly Func<bool> _redirectedFunc;
     private readonly Func<int> _widthFunc;
     private readonly Func<int> _heightFunc;
-    private readonly int _initialRow;
+    private int _initialRow;
     private readonly TimeSpan _interval;
     private readonly Dictionary<TKey, int> _keysToIndices = new();
     private readonly List<BarEntry> _entries = [];
@@ -60,6 +66,38 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         lock (_lock)
         {
             GetOrCreate(barKey);
+            int availableHeight = AvailableHeight;
+            if (availableHeight >= _entries.Count)
+            {
+                int neededHeight = _initialRow + _entries.Count - AvailableHeight;
+                if (neededHeight > 0)
+                {
+                    MoveTo(AvailableHeight - 1);
+                    for (int i = 0; i < neededHeight; i++)
+                    {
+                        AdvanceLine();
+                    }
+                    _initialRow -= neededHeight;
+                    for (int i = 0; i < _entries.Count; i++)
+                    {
+                        var entry = _entries[i];
+                        _keysToIndices[entry.Key] = i;
+                        MoveTo(i);
+                        entry.State.Redraw(_output);
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Advances to the next line.
+    /// </summary>
+    protected virtual void AdvanceLine()
+    {
+        lock (_lock)
+        {
+            _output.WriteLine();
         }
     }
 
