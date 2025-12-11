@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using ConFormat;
 
+namespace ConFormatSample;
+
 public class TimedDownloadPrefabContentFiller : IContentFiller
 {
     public static TimedDownloadPrefabContentFiller Create(string initialName)

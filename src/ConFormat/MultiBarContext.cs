@@ -65,7 +65,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     {
         lock (_lock)
         {
-            GetOrCreate(barKey);
+            AllocateInternal(barKey);
             int availableHeight = AvailableHeight;
             if (availableHeight >= _entries.Count)
             {
@@ -140,17 +140,16 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         return false;
     }
 
-    private KeyValuePair<int, BarEntry> GetOrCreate(TKey barKey)
+    private void AllocateInternal(TKey barKey)
     {
-        if (_keysToIndices.TryGetValue(barKey, out int index))
+        if (_keysToIndices.ContainsKey(barKey))
         {
-            return new KeyValuePair<int, BarEntry>(index, _entries[index]);
+            return;
         }
         int addIndex = _entries.Count;
         var entry = CreateAndStartNewBarEntry(barKey);
         _entries.Add(entry);
         _keysToIndices[barKey] = addIndex;
-        return new KeyValuePair<int, BarEntry>(addIndex, entry);
     }
 
     private static BarEntry CreateAndStartNewBarEntry(TKey barKey)
