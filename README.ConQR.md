@@ -1,6 +1,6 @@
 ## ConQR
 
-Provides QR code output on the terminal.
+Provides Unicode-based QR code formatting for use in a terminal.
 
 This project uses code by Project Nayuki, licensed as follows:
 
