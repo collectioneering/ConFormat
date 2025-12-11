@@ -31,16 +31,16 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     /// </summary>
     /// <param name="output">Output writer.</param>
     /// <param name="redirectedFunc">Function that returns true if the output is redirected.</param>
-    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns true).</param>
-    /// <param name="heightFunc">TODO</param>
-    /// <param name="initialRowFunc">TODO</param>
+    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
+    /// <param name="heightFunc">Function that returns the terminal viewport height (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
+    /// <param name="initialRow">The 0-indexed row of the cursor to start with.</param>
     /// <param name="interval">Update interval.</param>
     protected MultiBarContext(
         TextWriter output,
         Func<bool> redirectedFunc,
         Func<int> widthFunc,
         Func<int> heightFunc,
-        Func<int> initialRowFunc,
+        int initialRow,
         TimeSpan interval)
     {
         _interval = interval;
@@ -48,7 +48,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         _redirectedFunc = redirectedFunc;
         _widthFunc = widthFunc;
         _heightFunc = heightFunc;
-        _initialRow = initialRowFunc();
+        _initialRow = initialRow;
     }
 
     /// <summary>
@@ -225,9 +225,9 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     /// <param name="output">Output writer.</param>
     /// <param name="forceFallback">If true, force fallback to a simple implementation.</param>
     /// <param name="redirectedFunc">Function that returns true if the output is redirected.</param>
-    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns true).</param>
-    /// <param name="heightFunc">TODO</param>
-    /// <param name="initialRowFunc">TODO</param>
+    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
+    /// <param name="heightFunc">Function that returns the terminal viewport height (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
+    /// <param name="initialRow">The 0-indexed row of the cursor to start with.</param>
     /// <param name="interval">Update interval.</param>
     /// <returns></returns>
     public static MultiBarContext<TKey> Create(
@@ -236,7 +236,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         Func<bool> redirectedFunc,
         Func<int> widthFunc,
         Func<int> heightFunc,
-        Func<int> initialRowFunc,
+        int initialRow,
         TimeSpan interval = default)
     {
         if (interval == default)
@@ -245,9 +245,9 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         }
         if (!forceFallback && OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
         {
-            return new WindowsMultiBarContext<TKey>(output, redirectedFunc, widthFunc, heightFunc, initialRowFunc, interval);
+            return new WindowsMultiBarContext<TKey>(output, redirectedFunc, widthFunc, heightFunc, initialRow, interval);
         }
-        return new WidthMinusOneMultiBarContext<TKey>(output, redirectedFunc, widthFunc, heightFunc, initialRowFunc, interval);
+        return new WidthMinusOneMultiBarContext<TKey>(output, redirectedFunc, widthFunc, heightFunc, initialRow, interval);
     }
 
     /// <summary>

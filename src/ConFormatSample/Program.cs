@@ -94,7 +94,7 @@ async Task DemoMultiDownloadBarAsync()
                static () => Console.IsOutputRedirected,
                static () => Console.BufferWidth,
                static () => Console.WindowHeight,
-               static () => Console.CursorTop - Console.WindowTop,
+               Console.CursorTop - Console.WindowTop,
                TimeSpan.FromSeconds(0.05)))
     {
         await Task.WhenAll(
@@ -111,7 +111,7 @@ async Task DemoMultiDownloadBarAsync()
                static () => Console.IsOutputRedirected,
                static () => Console.BufferWidth,
                static () => Console.WindowHeight,
-               static () => Console.CursorTop - Console.WindowTop,
+               Console.CursorTop - Console.WindowTop,
                TimeSpan.FromSeconds(0.05)))
     {
         var content = new StringContentFiller("f", ContentAlignment.Left);

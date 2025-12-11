@@ -15,18 +15,18 @@ public class WidthMinusOneMultiBarContext<TKey> : MultiBarContext<TKey> where TK
     /// </summary>
     /// <param name="output">Output writer.</param>
     /// <param name="redirectedFunc">Function that returns true if the output is redirected.</param>
-    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns true).</param>
-    /// <param name="heightFunc">TODO</param>
-    /// <param name="initialRowFunc">TODO</param>
+    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
+    /// <param name="heightFunc">Function that returns the terminal viewport height (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
+    /// <param name="initialRow">The 0-indexed row of the cursor to start with.</param>
     /// <param name="interval">Update interval.</param>
     public WidthMinusOneMultiBarContext(
         TextWriter output,
         Func<bool> redirectedFunc,
         Func<int> widthFunc,
         Func<int> heightFunc,
-        Func<int> initialRowFunc,
+        int initialRow,
         TimeSpan interval)
-        : base(output, redirectedFunc, widthFunc, heightFunc, initialRowFunc, interval)
+        : base(output, redirectedFunc, widthFunc, heightFunc, initialRow, interval)
     {
     }
 

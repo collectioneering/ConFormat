@@ -15,7 +15,7 @@ public class WidthMinusOneBarContext : BarContext
     /// </summary>
     /// <param name="output">Output writer.</param>
     /// <param name="redirectedFunc">Function that returns true if the output is redirected.</param>
-    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns true).</param>
+    /// <param name="widthFunc">Function that returns the terminal width (only needs to return a valid value when <paramref name="redirectedFunc"/> returns false).</param>
     /// <param name="interval">Update interval.</param>
     public WidthMinusOneBarContext(TextWriter output, Func<bool> redirectedFunc, Func<int> widthFunc, TimeSpan interval) : base(output, redirectedFunc, widthFunc, interval)
     {
