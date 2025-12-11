@@ -23,7 +23,7 @@ public abstract class BarContext : IDisposable
     private readonly Func<int> _widthFunc;
     private readonly TimeSpan _interval;
     private readonly Stopwatch _stopwatch;
-    private readonly StringBuilder _stringBuilder;
+    private readonly BarState _state;
     private bool _active;
 
     /// <summary>
@@ -41,7 +41,7 @@ public abstract class BarContext : IDisposable
         _widthFunc = widthFunc;
         _stopwatch = new Stopwatch();
         _stopwatch.Start();
-        _stringBuilder = new StringBuilder();
+        _state = new BarState();
     }
 
     /// <summary>
@@ -93,21 +93,13 @@ public abstract class BarContext : IDisposable
             return;
         }
         _active = false;
-        EndLine();
+        _state.EndLine(_output);
     }
 
     private void DrawInternal<T>(ref T contentFiller, int scrollIndex) where T : IContentFiller
     {
         _stopwatch.Restart();
-        _stringBuilder.Clear();
-        int widthRemaining = AvailableWidth;
-        _stringBuilder.Append('\r');
-        if (widthRemaining > 0)
-        {
-            contentFiller.Fill(_stringBuilder, widthRemaining, scrollIndex);
-        }
-        DrawLine(_stringBuilder);
-        _stringBuilder.Clear();
+        _state.Draw(ref contentFiller, scrollIndex, AvailableWidth, _output);
     }
 
     internal struct BlankContentFiller : IContentFiller
@@ -116,26 +108,6 @@ public abstract class BarContext : IDisposable
         {
             StringFillUtil.PadRemaining(stringBuilder, width);
         }
-    }
-
-    /// <summary>
-    /// Draws the content of the specified <see cref="StringBuilder"/>.
-    /// </summary>
-    /// <param name="stringBuilder"><see cref="StringBuilder"/> with the content to write.</param>
-    protected virtual void DrawLine(StringBuilder stringBuilder)
-    {
-        foreach (var chunk in stringBuilder.GetChunks())
-        {
-            _output.Write(chunk.Span);
-        }
-    }
-
-    /// <summary>
-    /// Applies a newline to the output writer.
-    /// </summary>
-    protected virtual void EndLine()
-    {
-        _output.WriteLine();
     }
 
     /// <summary>
