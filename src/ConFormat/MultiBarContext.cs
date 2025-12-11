@@ -126,12 +126,15 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
         }
     }
 
-    private bool TryGet(TKey barKey, out KeyValuePair<int, BarEntry> value)
+    private bool TryGet(TKey barKey, out KeyValuePair<int, BarEntry> value, bool allowOutOfView)
     {
         if (_keysToIndices.TryGetValue(barKey, out int index))
         {
-            value = new KeyValuePair<int, BarEntry>(index, _entries[index]);
-            return true;
+            if (_initialRow + index < AvailableHeight || allowOutOfView)
+            {
+                value = new KeyValuePair<int, BarEntry>(index, _entries[index]);
+                return true;
+            }
         }
         value = default;
         return false;
@@ -173,7 +176,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     {
         lock (_lock)
         {
-            if (TryGet(barKey, out var value))
+            if (TryGet(barKey, out var value, false))
             {
                 DrawInternal(value.Value, value.Key, ref contentFiller, scrollIndex);
             }
@@ -191,7 +194,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     {
         lock (_lock)
         {
-            if (!TryGet(barKey, out var value))
+            if (!TryGet(barKey, out var value, false))
             {
                 return;
             }
@@ -211,7 +214,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     {
         lock (_lock)
         {
-            if (!TryGet(barKey, out var value))
+            if (!TryGet(barKey, out var value, false))
             {
                 return;
             }
