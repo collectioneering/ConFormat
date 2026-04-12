@@ -61,14 +61,16 @@ public abstract class BarContext : IDisposable
     /// </summary>
     /// <param name="contentFiller">Content.</param>
     /// <param name="scrollIndex">Current scroll index for the content.</param>
+    /// <param name="acceptAction">Action to take prior to accepted update.</param>
     /// <typeparam name="T">Content filler type.</typeparam>
-    public void Update<T>(ref T contentFiller, int scrollIndex = 0) where T : IContentFiller
+    public void Update<T>(ref T contentFiller, int scrollIndex = 0, ContentFillerAction<T>? acceptAction = null) where T : IContentFiller
     {
         _active = true;
         if (_stopwatch.Elapsed < _interval)
         {
             return;
         }
+        acceptAction?.Invoke(ref contentFiller);
         DrawInternal(ref contentFiller, scrollIndex);
     }
 

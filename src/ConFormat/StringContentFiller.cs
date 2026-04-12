@@ -26,6 +26,10 @@ public class StringContentFiller : IContentFiller
         get => _content;
         set
         {
+            if (_content == value)
+            {
+                return;
+            }
             _content = value ?? throw new InvalidOperationException();
             _contentLength = StringFillUtil.ComputeLength(_content);
         }

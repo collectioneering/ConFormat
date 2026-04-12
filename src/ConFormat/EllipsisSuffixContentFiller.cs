@@ -21,8 +21,9 @@ public class EllipsisSuffixContentFiller : IContentFiller
     /// <summary>
     /// Base message.
     /// </summary>
-    public readonly string Message;
-    private readonly string[] _messages;
+    public string Message { get; private set; }
+
+    private string[] _messages;
     private int _i;
 
     /// <summary>
@@ -38,8 +39,22 @@ public class EllipsisSuffixContentFiller : IContentFiller
             throw new ArgumentOutOfRangeException(nameof(initialI));
         }
         Message = message;
-        _messages = new[] { $"{message}.", $"{message}..", $"{message}..." };
+        _messages = [$"{message}.", $"{message}..", $"{message}..."];
         _i = initialI % 3;
+    }
+
+    /// <summary>
+    /// Updates message.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    public void SetMessage(string message)
+    {
+        if (Message == message)
+        {
+            return;
+        }
+        Message = message;
+        _messages = [$"{message}.", $"{message}..", $"{message}..."];
     }
 
     /// <inheritdoc />

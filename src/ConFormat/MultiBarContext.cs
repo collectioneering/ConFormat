@@ -188,8 +188,9 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
     /// <param name="barKey">Bar key.</param>
     /// <param name="contentFiller">Content.</param>
     /// <param name="scrollIndex">Current scroll index for the content.</param>
+    /// <param name="acceptAction">Action to take prior to accepted update.</param>
     /// <typeparam name="T">Content filler type.</typeparam>
-    public void Update<T>(TKey barKey, ref T contentFiller, int scrollIndex = 0) where T : IContentFiller
+    public void Update<T>(TKey barKey, ref T contentFiller, int scrollIndex = 0, ContentFillerAction<T>? acceptAction = null) where T : IContentFiller
     {
         lock (_lock)
         {
@@ -201,6 +202,7 @@ public abstract class MultiBarContext<TKey> : IDisposable where TKey : IEquatabl
             {
                 return;
             }
+            acceptAction?.Invoke(ref contentFiller);
             DrawInternal(value.Value, value.Key, ref contentFiller, scrollIndex);
         }
     }
